@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  dvwa:
+    image: ghcr.io/darkness4/dvwa-docker:latest
+    pull_policy: never
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:80'
+    depends_on:
+      - database
+    env_file:
+      - .env
+    volumes:
+      - ./config:/config
+
+  database:
+    image: docker.io/library/mariadb:10.7
+    ports:
+      - '3306:3306'
+    env_file:
+      - .env
+    volumes:
+      - 'database_data:/var/lib/mysql'
+
+volumes:
+  database_data:
